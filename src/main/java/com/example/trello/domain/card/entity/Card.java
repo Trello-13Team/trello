@@ -1,6 +1,7 @@
 package com.example.trello.domain.card.entity;
 
 import com.example.trello.domain.board.entity.Board;
+import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseCreatedTimeEntity;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 import org.joda.time.DateTime;
+
+import java.util.List;
 
 @Entity
 @DynamicInsert
@@ -31,8 +34,8 @@ public class Card extends BaseCreatedTimeEntity {
     private DateTime dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "list_id")
+    private List list;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
