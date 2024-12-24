@@ -24,15 +24,15 @@ public class Board extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true, length = 255)
     @Length(min = 1, max = 30)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = true, length = 255)
     @Length(min = 1, max = 200)
     private String color;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     @Length(min = 1, max = 200)
     private String imageUrl;
 

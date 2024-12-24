@@ -1,6 +1,7 @@
 package com.example.trello.domain.card.entity;
 
 import com.example.trello.domain.board.entity.Board;
+import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseCreatedTimeEntity;
 import com.example.trello.global.entity.BaseTimeEntity;
@@ -35,7 +36,7 @@ public class Card extends BaseCreatedTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_id")
-    private List list;
+    private ProcessList list;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
