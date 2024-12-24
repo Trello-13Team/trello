@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - main
+      - develop
 
 # 워크플로우 작업 정의
 jobs:
