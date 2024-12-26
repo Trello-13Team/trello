@@ -1,7 +1,4 @@
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -37,7 +34,7 @@ jobs:
 
       # 5. 도커 이미지 빌드 및 푸시 (선택사항)
       - name: Docker Build and Push
-        if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main')) || (github.event_name == 'pull_request' && (github.head_ref == 'main' || github.head_ref == 'develop')) }}
+        if: ${{ github.event_name == 'pull_request' && (github.head_ref == 'main' || github.head_ref == 'develop') }}
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
@@ -51,8 +48,8 @@ jobs:
             --build-arg DATABASE_URL="$DATABASE_URL" \
             --build-arg DATABASE_ID="$DATABASE_ID" \
             --build-arg DATABASE_PASSWORD="$DATABASE_PASSWORD" \
-            -t "$DOCKER_HUB_REPOSITORY" .
-          docker push "$DOCKER_HUB_REPOSITORY"
+            -t "$DOCKER_HUB_REPOSITORY":main .
+          docker push "$DOCKER_HUB_REPOSITORY":main
       
 
       # 6. AWS 인증
