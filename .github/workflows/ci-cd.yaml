@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - main
+      - develop
 
 # 워크플로우 작업 정의
 jobs:
@@ -43,7 +44,7 @@ jobs:
 
       # 5. 도커 이미지 빌드 및 푸시
       - name: Docker Build and Push
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
