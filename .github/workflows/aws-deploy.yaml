@@ -77,7 +77,7 @@ jobs:
           script: |
             echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin
             sudo docker rm -f server 
-            sudo docker pull "${{secrets.DOCKER_HUB_REPOSITORY}}"
+            sudo docker pull "${{secrets.DOCKER_HUB_REPOSITORY}}:main"
             sudo docker tag "${{secrets.DOCKER_HUB_REPOSITORY}}" tutorial:main
             sudo docker run -d \
               --name server \
