@@ -2,13 +2,10 @@ name: CI/CD Pipeline
 
 # 워크플로우 실행 조건
 on:
-  push:
-    branches:
-      - main
-      - develop
   pull_request:
     branches:
       - main
+      - develop
 
 # 워크플로우 작업 정의
 jobs:
@@ -43,7 +40,6 @@ jobs:
 
       # 5. 도커 이미지 빌드 및 푸시
       - name: Docker Build and Push
-        if: github.ref == 'refs/heads/main'
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
@@ -53,12 +49,19 @@ jobs:
           DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
           echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+          
+          if [ "${{ github.base_ref }}" = "develop" ]; then
+            DOCKER_TAG="develop"
+          elif [ "${{ github.base_ref }}" = "main" ]; then
+            DOCKER_TAG="main"
+          fi
+        
           docker build \
             --build-arg DATABASE_URL="$DATABASE_URL" \
             --build-arg DATABASE_ID="$DATABASE_ID" \
             --build-arg DATABASE_PASSWORD="$DATABASE_PASSWORD" \
-            -t "$DOCKER_HUB_REPOSITORY" .
-          docker push "$DOCKER_HUB_REPOSITORY"
+            -t "$DOCKER_HUB_REPOSITORY:$DOCKER_TAG" .
+          docker push "$DOCKER_HUB_REPOSITORY:$DOCKER_TAG"
       
 
  
