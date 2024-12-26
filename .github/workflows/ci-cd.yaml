@@ -44,7 +44,6 @@ jobs:
 
       # 5. 도커 이미지 빌드 및 푸시
       - name: Docker Build and Push
-        if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || (github.event_name == 'pull_request' && (github.head_ref == 'main' || github.head_ref == 'develop')) }}
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
@@ -54,9 +53,12 @@ jobs:
           DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
           echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-          if [ "${{ github.ref }}" = "refs/heads/develop" ]; then
-                   DOCKER_TAG="develop"
+          if [ "${{ github.base_ref }}" = "refs/heads/develop" ]; then
+                DOCKER_TAG="develop"
+          elif [ "${{ github.base_ref }}" = "refs/heads/main" ]; then
+                DOCKER_TAG="main"
           fi
+  
           docker build \
             --build-arg DATABASE_URL="$DATABASE_URL" \
             --build-arg DATABASE_ID="$DATABASE_ID" \
