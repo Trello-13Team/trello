@@ -4,7 +4,9 @@ import com.example.trello.domain.board.entity.Board;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
@@ -15,6 +17,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProcessList extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +30,13 @@ public class ProcessList extends BaseTimeEntity {
     @Column
     private Long Order;
 
-    @Column
-    @OneToMany(mappedBy = "process_list", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "processList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
 
 }

@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class BaseTimeEntity extends BaseCreatedTimeEntity {
 
     @LastModifiedDate
-    @Column(name = "updated_at", columnDefinition = "datetime comment '수정일'")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", columnDefinition = "DATETIME comment '삭제 일시'")
+    @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 }
