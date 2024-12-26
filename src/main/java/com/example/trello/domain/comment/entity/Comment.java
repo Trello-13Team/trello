@@ -4,7 +4,9 @@ import com.example.trello.domain.board.entity.Board;
 import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
@@ -13,6 +15,7 @@ import org.hibernate.validator.constraints.Length;
 @DynamicInsert
 @DynamicUpdate
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

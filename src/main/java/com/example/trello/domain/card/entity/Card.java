@@ -6,7 +6,9 @@ import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseCreatedTimeEntity;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +20,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Card extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +38,15 @@ public class Card extends BaseCreatedTimeEntity {
     private DateTime dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "list_id")
-    private ProcessList list;
+    @JoinColumn(name = "processList_id")
+    private ProcessList processList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
 }
