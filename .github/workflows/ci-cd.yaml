@@ -53,11 +53,9 @@ jobs:
           DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
           echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-          if [ "${{ github.base_ref }}" = "refs/heads/develop" ]; then
-                DOCKER_TAG="develop"
-          elif [ "${{ github.base_ref }}" = "refs/heads/main" ]; then
-                DOCKER_TAG="main"
-          fi
+          BASE_REF="${{ github.base_ref }}"
+          DOCKER_TAG=$(basename $BASE_REF)
+          echo "Docker tag set to: $DOCKER_TAG"
   
           docker build \
             --build-arg DATABASE_URL="$DATABASE_URL" \
