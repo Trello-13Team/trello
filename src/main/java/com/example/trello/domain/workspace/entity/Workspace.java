@@ -1,42 +1,40 @@
-package com.example.trello.domain.card.entity;
+package com.example.trello.domain.workspace.entity;
 
 import com.example.trello.domain.board.entity.Board;
-import com.example.trello.domain.list.entity.ProcessList;
+import com.example.trello.domain.member.entity.Member;
 import com.example.trello.domain.user.entity.User;
-import com.example.trello.global.entity.BaseCreatedTimeEntity;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
-import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Getter
-public class Card extends BaseCreatedTimeEntity {
+public class Workspace extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     @Length(min = 1, max = 30)
-    private String title;
+    private String name;
 
     @Column(nullable = false)
-    @Length(min = 1, max = 200)
-    private String content;
+    @Length(min = 1, max = 100)
+    private String description;
 
-    @Column(nullable = false)
-    private DateTime dueDate;
+    @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Member> members = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "list_id")
-    private ProcessList list;
+    @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Board> boards = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
