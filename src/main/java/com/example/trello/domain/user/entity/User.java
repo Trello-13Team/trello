@@ -15,6 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,18 +45,16 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Workspace> workspaces;
+    private List<Workspace> workspaces = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
-
+    private List<Comment> comments = new ArrayList<>();
 
 
     @Builder
