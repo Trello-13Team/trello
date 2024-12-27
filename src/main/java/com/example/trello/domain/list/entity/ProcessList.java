@@ -29,7 +29,7 @@ public class ProcessList extends BaseTimeEntity {
     private String title;
 
     @Column
-    private Long Order;
+    private Long order;
 
 
     @OneToMany(mappedBy = "processList", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,7 +42,7 @@ public class ProcessList extends BaseTimeEntity {
     @Builder
     public ProcessList(String title, Long order) {
         this.title = title;
-        this.Order = order;
+        this.order = order;
     }
 
 }
