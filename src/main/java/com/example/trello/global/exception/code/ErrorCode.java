@@ -29,6 +29,7 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "Member를 찾을 수 없습니다"),
     NOT_FOUND_PROCESSLIST(HttpStatus.NOT_FOUND, "ProcessList를 찾을 수 없습니다"),
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "User를 찾을 수 없습니다"),
+    NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "Card를 찾을 수 없습니다"),
     /**
      * unAuthorized
      */

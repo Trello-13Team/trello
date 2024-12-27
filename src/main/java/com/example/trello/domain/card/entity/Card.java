@@ -57,4 +57,9 @@ public class Card extends BaseCreatedTimeEntity {
         this.user = user;
     }
 
+    public void switchProcessList(ProcessList processList) {
+        this.processList.getCards().remove(this);
+        this.processList = processList;
+        processList.getCards().add(this);
+    }
 }

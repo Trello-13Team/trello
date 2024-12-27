@@ -2,6 +2,7 @@ package com.example.trello.domain.card.service;
 
 import com.example.trello.domain.card.dto.CreateCardRequestDto;
 import com.example.trello.domain.card.dto.CreateCardResponseDto;
+import com.example.trello.domain.card.dto.SwitchProcessListResponseDto;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.card.repository.CardRepository;
 import com.example.trello.domain.list.entity.ProcessList;
@@ -26,20 +27,16 @@ public class CardService {
     private final ProcessListRepository processListRepository;
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
+
     @Transactional
     public CreateCardResponseDto createCard(CreateCardRequestDto requestDto,Long userId ,Long workspaceId, Long processListId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_USER)
         );
-        Member member = memberRepository.findByUser_IdAndWorkspace_Id(userId,workspaceId).orElseThrow(
-                () -> new BaseException(ErrorCode.NOT_FOUND_MEMBER)
-        );
         ProcessList processList = processListRepository.findById(processListId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_PROCESSLIST)
         );
-        if(member.getRole() == Member.MemberRole.MANAGER ){
-            throw new BaseException(ErrorCode.NOT_ALLOW_MANAGER);
-        }
+        checkWriteRole(workspaceId, userId);
         Card card = Card.builder()
                 .title(requestDto.getTitle())
                 .user(user)
@@ -50,4 +47,31 @@ public class CardService {
         cardRepository.save(card);
         return new CreateCardResponseDto(card.getId(),card.getTitle(),card.getContent(),card.getDueDate());
     }
+
+    @Transactional
+    public SwitchProcessListResponseDto switchProcessList(Long cardId, Long processListId,Long workspaceId ,Long userId) {
+        ProcessList processList = processListRepository.findById(processListId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_PROCESSLIST)
+        );
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
+        );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_USER)
+        );
+        checkWriteRole(workspaceId, userId);
+        card.switchProcessList(processList);
+        return new SwitchProcessListResponseDto(processListId);
+    }
+
+    private void checkWriteRole(Long workspaceId, Long userId) {
+        Member member = memberRepository.findByUser_IdAndWorkspace_Id(userId, workspaceId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        if(member.getRole() == Member.MemberRole.MANAGER ){
+            throw new BaseException(ErrorCode.NOT_ALLOW_MANAGER);
+        }
+    }
+
+
 }
