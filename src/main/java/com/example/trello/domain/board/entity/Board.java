@@ -1,6 +1,7 @@
 package com.example.trello.domain.board.entity;
 
 import com.example.trello.domain.card.entity.Card;
+import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.workspace.entity.Workspace;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -41,7 +42,7 @@ public class Board extends BaseTimeEntity {
     private Workspace workspace;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Card> cards = new ArrayList<>();
+    private List<ProcessList> processLists = new ArrayList<>();
 
 
 

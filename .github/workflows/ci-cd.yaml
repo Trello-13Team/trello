@@ -4,7 +4,6 @@ name: CI/CD Pipeline
 on:
   pull_request:
     branches:
-      - main
       - develop
 
 # 워크플로우 작업 정의
@@ -52,8 +51,6 @@ jobs:
           
           if [ "${{ github.base_ref }}" = "develop" ]; then
             DOCKER_TAG="develop"
-          elif [ "${{ github.base_ref }}" = "main" ]; then
-            DOCKER_TAG="main"
           fi
         
           docker build \
