@@ -73,7 +73,10 @@ public class CardService {
     @Transactional
     public DeleteCardResponseDto deleteCard(Long userId, Long workspace, Long cardId) {
         checkWriteRole(workspace,userId);
-        cardRepository.deleteById(cardId);
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
+                        );
+        cardRepository.delete(card);
         return new DeleteCardResponseDto(cardId);
     }
 
