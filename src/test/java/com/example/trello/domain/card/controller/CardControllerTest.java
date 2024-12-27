@@ -1,8 +1,6 @@
 package com.example.trello.domain.card.controller;
 
-import com.example.trello.domain.card.dto.CreateCardRequestDto;
-import com.example.trello.domain.card.dto.CreateCardResponseDto;
-import com.example.trello.domain.card.dto.SwitchProcessListResponseDto;
+import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.service.CardService;
 import com.example.trello.global.dto.Authentication;
 import com.example.trello.global.entity.Role;
@@ -97,5 +95,48 @@ class CardControllerTest {
 
         verify(cardService, times(1))
                 .switchProcessList(cardId, processListId, workspaceId, userId);
+    }
+
+    @Test
+    void updateCard() throws Exception {
+        Long cardId = 1L;
+        Long workspaceId = 1L;
+        Long processListId = 1L;
+        String title = "title";
+        String content = "content";
+        LocalDateTime dueDate = LocalDateTime.of(2025,1,1, 0, 0, 0);
+        UpdateCardRequestDto requestDto = new UpdateCardRequestDto(title, content, dueDate);
+        UpdateCardResponseDto responseDto = new UpdateCardResponseDto(title,content,dueDate);
+        ResponseEntity<CommonResponse<UpdateCardResponseDto>> responseEntity = CommonResponse.success(SuccessCode.SUCCESS_UPDATE, responseDto);
+
+        when(cardService.updateCard(any(UpdateCardRequestDto.class),any(Long.class),any(Long.class),any(Long.class))).thenReturn(responseDto);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/workspaces/1/lists/1/cards/1")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(objectMapper.writeValueAsString(responseEntity.getBody())));
+
+        verify(cardService, times(1))
+                .updateCard(any(UpdateCardRequestDto.class), eq(1L), eq(1L), eq(1L));
+
+    }
+
+    @Test
+    void deleteCard() throws Exception {
+        Long cardId = 1L;
+        DeleteCardResponseDto responseDto = new DeleteCardResponseDto(cardId);
+        ResponseEntity<CommonResponse<DeleteCardResponseDto>> responseEntity =
+                CommonResponse.success(SuccessCode.SUCCESS_DELETE, responseDto);
+        when(cardService.deleteCard(any(Long.class),any(Long.class),any(Long.class))).thenReturn(responseDto);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/workspaces/1/lists/1/cards/1")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responseEntity.getBody())));
+        verify(cardService, times(1))
+                .deleteCard(eq(1L), eq(1L), eq(1L));
     }
 }

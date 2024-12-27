@@ -1,8 +1,6 @@
 package com.example.trello.domain.card.controller;
 
-import com.example.trello.domain.card.dto.CreateCardRequestDto;
-import com.example.trello.domain.card.dto.CreateCardResponseDto;
-import com.example.trello.domain.card.dto.SwitchProcessListResponseDto;
+import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.service.CardService;
 import com.example.trello.global.dto.Authentication;
 import com.example.trello.global.exception.code.SuccessCode;
@@ -31,10 +29,25 @@ public class CardController {
     }
 
     @PatchMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
-    public ResponseEntity<CommonResponse<SwitchProcessListResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
+    public ResponseEntity<CommonResponse<SwitchProcessListResponseDto>> switchProcessList(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
                                                                                    @NotNull @Min(0) @RequestParam Long processListId, @SessionAttribute(USER_AUTH) Authentication auth) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE,cardService.switchProcessList(cardId, processListId, workspaceId, auth.getId()) );
     }
+
+    @PutMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
+    public ResponseEntity<CommonResponse<UpdateCardResponseDto>> updateCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
+                                                                            @RequestBody @Valid UpdateCardRequestDto requestDto, @SessionAttribute(USER_AUTH) Authentication auth) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS_UPDATE,cardService.updateCard(requestDto, auth.getId(), workspaceId,cardId) );
+    }
+
+    @DeleteMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
+    public ResponseEntity<CommonResponse<DeleteCardResponseDto>> deleteCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
+                                                                            @SessionAttribute(USER_AUTH) Authentication auth) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS_DELETE,cardService.deleteCard(auth.getId(), workspaceId, cardId) );
+    }
+
 }
 
