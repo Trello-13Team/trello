@@ -57,6 +57,12 @@ public class Card extends BaseCreatedTimeEntity {
         this.user = user;
     }
 
+    public void update(String title, String content, LocalDateTime dueDate) {
+        this.title = title;
+        this.content = content;
+        this.dueDate = dueDate;
+    }
+
     public void switchProcessList(ProcessList processList) {
         this.processList.getCards().remove(this);
         this.processList = processList;

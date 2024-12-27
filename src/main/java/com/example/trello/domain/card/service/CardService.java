@@ -1,8 +1,6 @@
 package com.example.trello.domain.card.service;
 
-import com.example.trello.domain.card.dto.CreateCardRequestDto;
-import com.example.trello.domain.card.dto.CreateCardResponseDto;
-import com.example.trello.domain.card.dto.SwitchProcessListResponseDto;
+import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.card.repository.CardRepository;
 import com.example.trello.domain.list.entity.ProcessList;
@@ -56,13 +54,33 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
         );
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new BaseException(ErrorCode.NOT_FOUND_USER)
-        );
+
         checkWriteRole(workspaceId, userId);
         card.switchProcessList(processList);
         return new SwitchProcessListResponseDto(processListId);
     }
+
+    @Transactional
+    public UpdateCardResponseDto updateCard(UpdateCardRequestDto requestDto,Long userId, Long workspace, Long cardId) {
+        checkWriteRole(workspace,userId);
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
+        );
+        card.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getDueDate());
+        return new UpdateCardResponseDto(card.getTitle(),card.getContent(),card.getDueDate());
+    }
+
+    @Transactional
+    public DeleteCardResponseDto deleteCard(Long userId, Long workspace, Long cardId) {
+        checkWriteRole(workspace,userId);
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
+                        );
+        cardRepository.delete(card);
+        return new DeleteCardResponseDto(cardId);
+    }
+
+
 
     private void checkWriteRole(Long workspaceId, Long userId) {
         Member member = memberRepository.findByUser_IdAndWorkspace_Id(userId, workspaceId).orElseThrow(
