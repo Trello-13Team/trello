@@ -64,7 +64,7 @@ public class CardController {
     }
 
     @PostMapping("workspaces/{workspaceId}/cards/{cardId}")
-    public ResponseEntity<CommonResponse<UploadFileInfo>> uploadFile(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, MultipartFile file, @SessionAttribute(USER_AUTH) Authentication auth) {
+    public ResponseEntity<CommonResponse<UploadFileInfo>> uploadFile(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, @RequestPart(name = "file", required = false) @NotNull MultipartFile file, @SessionAttribute(USER_AUTH) Authentication auth) {
         return CommonResponse.success(SuccessCode.SUCCESS, cardService.uploadFile(auth.getId(),workspaceId, cardId, file) );
     }
 
