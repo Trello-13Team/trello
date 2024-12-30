@@ -1,5 +1,6 @@
 package com.example.trello.domain.card.service;
 
+import com.example.trello.domain.board.entity.Board;
 import com.example.trello.domain.board.repository.BoardRepository;
 import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.entity.Card;
@@ -43,14 +44,16 @@ public class CardService {
         ProcessList processList = processListRepository.findById(processListId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_PROCESSLIST)
         );
-
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_BOARD)
+        );
         checkWriteRole(workspaceId, userId);
         Card card = Card.builder()
                 .title(requestDto.getTitle())
                 .user(user)
                 .content(requestDto.getContent())
                 .dueDate(requestDto.getDueDate())
-                .boardId(boardId)
+                .board(board)
                 .workspaceId(workspaceId)
                 .processList(processList)
                 .build();
