@@ -2,6 +2,7 @@ package com.example.trello.domain.card.repository;
 
 import com.example.trello.domain.card.dto.CardBriefInfo;
 import com.example.trello.domain.card.dto.CardDetailedInfo;
+import com.example.trello.domain.card.dto.FileMetaDataDto;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.user.entity.User;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,5 @@ public interface CardQueryRepository {
                                        Long pageNumber, Long pageSize);
 
     CardDetailedInfo findCardDetailedInfoById(Long id);
+    List<FileMetaDataDto> findMetaDataDtoByCardId(Long cardId);
 }

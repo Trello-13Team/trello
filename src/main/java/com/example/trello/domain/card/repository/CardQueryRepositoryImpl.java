@@ -1,15 +1,13 @@
 package com.example.trello.domain.card.repository;
 
-import com.example.trello.domain.card.dto.CardBriefInfo;
-import com.example.trello.domain.card.dto.CardDetailedInfo;
-import com.example.trello.domain.card.dto.QCardBriefInfo;
-import com.example.trello.domain.card.dto.QCardDetailedInfo;
+import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.entity.QCard;
 import com.example.trello.domain.comment.dto.CommentInfo;
 import com.example.trello.domain.comment.dto.QCommentInfo;
 import com.example.trello.domain.comment.entity.QComment;
 import com.example.trello.domain.member.entity.QMember;
 import com.example.trello.domain.user.entity.QUser;
+import com.example.trello.global.entity.QFileStorage;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
     private final QUser user = QUser.user;
     private final QMember member = QMember.member;
     private final QComment comment = QComment.comment;
-
+    private final QFileStorage fileStorage = QFileStorage.fileStorage;
     @Override
     public List<CardBriefInfo> searchAllCards(String title, String content, LocalDateTime dueDate, String responsibleUserName,
                                               Long boardId, Long workspaceId,Long pageNumber, Long pageSize) {
@@ -63,6 +61,16 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
             cardDetailedInfo.setComments(commentInfoList);
         }
         return cardDetailedInfo;
+
+    }
+
+    @Override
+    public List<FileMetaDataDto> findMetaDataDtoByCardId(Long cardId) {
+
+        return queryFactory.select(new QFileMetaDataDto(fileStorage.id, fileStorage.fileName, fileStorage.fileKey, fileStorage.fileSize, fileStorage.uploadedAt))
+                .from(fileStorage)
+                .where(fileStorage.card.id.eq(cardId))
+                .fetch();
 
     }
 

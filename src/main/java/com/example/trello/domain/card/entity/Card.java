@@ -6,6 +6,7 @@ import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseCreatedTimeEntity;
 import com.example.trello.global.entity.BaseTimeEntity;
+import com.example.trello.global.entity.FileStorage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,6 +45,7 @@ public class Card extends BaseCreatedTimeEntity {
 
     @Column(nullable = false, updatable = false)
     private Long boardId;
+
     @Column(nullable = false, updatable = false)
     private Long workspaceId;
 
@@ -57,6 +59,9 @@ public class Card extends BaseCreatedTimeEntity {
 
     @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileStorage> fileStorages = new ArrayList<>();
 
     @Builder
     private Card(String title, String content, LocalDateTime dueDate, ProcessList processList, User user, Long boardId, Long workspaceId) {
@@ -80,4 +85,6 @@ public class Card extends BaseCreatedTimeEntity {
         this.processList = processList;
         processList.getCards().add(this);
     }
+
+
 }

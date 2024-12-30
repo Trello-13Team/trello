@@ -32,6 +32,13 @@ public enum ErrorCode {
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "Card를 찾을 수 없습니다"),
     NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "Board를 찾을 수 없습니다" ),
     NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "Comment를 찾을 수 없습니다"),
+    NOT_FOUND_File(HttpStatus.NOT_FOUND, "File을 찾을 수 없습니다"),
+    /**
+     * Image
+     */
+    S3_UPLOADER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드 중 오류가 발생하였습니다."),
+    BAD_FORMAT(HttpStatus.BAD_REQUEST, "허용된 파일 형식이 아닙니다."),
+
     /**
      * unAuthorized
      */

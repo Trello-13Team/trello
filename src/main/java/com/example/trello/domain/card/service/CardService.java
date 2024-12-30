@@ -1,23 +1,27 @@
 package com.example.trello.domain.card.service;
 
-import com.example.trello.domain.board.entity.Board;
 import com.example.trello.domain.board.repository.BoardRepository;
 import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.card.repository.CardRepository;
+import com.example.trello.domain.card.repository.FileRepository;
 import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.list.repository.ProcessListRepository;
 import com.example.trello.domain.member.entity.Member;
 import com.example.trello.domain.member.repository.MemberRepository;
 import com.example.trello.domain.user.entity.User;
 import com.example.trello.domain.user.repository.UserRepository;
+import com.example.trello.global.S3.S3Service;
+import com.example.trello.global.S3.S3Uploader;
+import com.example.trello.global.dto.UploadFileInfo;
+import com.example.trello.global.entity.FileStorage;
 import com.example.trello.global.exception.BaseException;
 import com.example.trello.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,6 +32,8 @@ public class CardService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
+    private final S3Service s3Service;
+    private final FileRepository fileRepository;
 
     @Transactional
     public CreateCardResponseDto createCard(CreateCardRequestDto requestDto,Long userId ,Long workspaceId, Long boardId,Long processListId) {
@@ -101,8 +107,39 @@ public class CardService {
     public CardDetailedInfo findCardDetailedInfo(Long userId, Long workspace, Long cardId) {
         checkReadRole(workspace,userId);
 
-        return cardRepository.searchCardDetailedInfo(cardId);
+        return cardRepository.findCardDetailedInfoById(cardId);
     }
+
+    @Transactional
+    public UploadFileInfo uploadFile(Long userId, Long workspaceId, Long cardId, MultipartFile file) {
+        checkWriteRole(workspaceId,userId);
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
+        );
+        UploadFileInfo fileInfo = s3Service.uploadFile(file);
+        FileStorage fileStorage = FileStorage.builder().fileKey(fileInfo.fileUrl()).fileName(file.getName()).fileSize(file.getSize()).card(card).build();
+        fileRepository.save(fileStorage);
+        return new UploadFileInfo(fileStorage.getFileKey());
+    }
+
+    @Transactional
+    public FindFileResponseDto getFileMetaData(Long userId, Long workspace, Long cardId) {
+        checkReadRole(workspace,userId);
+
+        return new FindFileResponseDto(cardRepository.findMetaDataDtoByCardId(cardId));
+    }
+
+    @Transactional
+    public DeleteFileResponseDto deleteFile(Long userId, Long workspace, Long fileId) {
+        checkWriteRole(workspace,userId);
+        FileStorage fileStorage = fileRepository.findById(fileId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_File)
+        );
+        s3Service.deleteFile(fileStorage.getFileKey());
+        fileRepository.deleteById(fileId);
+        return new DeleteFileResponseDto(fileId);
+    }
+
 
 
 
