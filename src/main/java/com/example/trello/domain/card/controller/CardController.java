@@ -22,19 +22,19 @@ import static com.example.trello.global.constants.GlobalConstants.USER_ID;
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
-
-    @PostMapping("workspaces/{workspaceId}/lists/{listId}/cards")
-    public ResponseEntity<CommonResponse<CreateCardResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @RequestBody @Valid CreateCardRequestDto requestDto,
-                                                            @SessionAttribute(USER_AUTH) Authentication auth) {
-
-        return CommonResponse.success(SuccessCode.SUCCESS_INSERT,cardService.createCard(requestDto, auth.getId(), workspaceId,listId) );
-    }
-
-    @PatchMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
-    public ResponseEntity<CommonResponse<SwitchProcessListResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
-                                                                                   @NotNull @Min(0) @RequestParam Long processListId, @SessionAttribute(USER_AUTH) Authentication auth) {
-
-        return CommonResponse.success(SuccessCode.SUCCESS_UPDATE,cardService.switchProcessList(cardId, processListId, workspaceId, auth.getId()) );
-    }
+//
+//    @PostMapping("workspaces/{workspaceId}/lists/{listId}/cards")
+//    public ResponseEntity<CommonResponse<CreateCardResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @RequestBody @Valid CreateCardRequestDto requestDto,
+//                                                            @SessionAttribute(USER_AUTH) Authentication auth) {
+//
+//        return CommonResponse.success(SuccessCode.SUCCESS_INSERT,cardService.createCard(requestDto, auth.getId(), workspaceId,listId) );
+//    }
+//
+//    @PatchMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
+//    public ResponseEntity<CommonResponse<SwitchProcessListResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
+//                                                                                   @NotNull @Min(0) @RequestParam Long processListId, @SessionAttribute(USER_AUTH) Authentication auth) {
+//
+//        return CommonResponse.success(SuccessCode.SUCCESS_UPDATE,cardService.switchProcessList(cardId, processListId, workspaceId, auth.getId()) );
+//    }
 }
 

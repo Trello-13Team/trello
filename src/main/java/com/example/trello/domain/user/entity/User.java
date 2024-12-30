@@ -37,7 +37,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    @Length(min = 6, max = 30)
+    @Length(min = 6, max = 300)
     private String password;
 
     @Column(nullable = false)
@@ -58,10 +58,13 @@ public class User {
 
 
     @Builder
-    public User(String name, String email, String password, Role role) {
+    public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = Role.of(role);    }
+
+    public void delete(Role role) {
         this.role = role;
     }
 }

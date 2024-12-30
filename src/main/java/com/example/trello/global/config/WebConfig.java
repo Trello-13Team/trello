@@ -20,12 +20,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 
-    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout"};
-    private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/"};
-    private static final String[] ADMIN_ROLE_REQUIRED_PATH_PATTERNS = {"/admins/*"};
+    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout", "/workspace/**"};
+    private static final String[] ADMIN_ROLE_REQUIRED_PATH_PATTERNS = {"/workspaces/admin"};
 
     private final AuthInterceptor authInterceptor;
-    private final UserRoleInterceptor userRoleInterceptor;
     private final AdminRoleInterceptor adminRoleInterceptor;
 
     @Override
@@ -38,9 +36,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS)
                 .order(Ordered.HIGHEST_PRECEDENCE + 1);
 
-        registry.addInterceptor(userRoleInterceptor)
-                .addPathPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS)
-                .order(Ordered.HIGHEST_PRECEDENCE + 2);
     }
 
     @Bean
@@ -58,15 +53,6 @@ public class WebConfig implements WebMvcConfigurer {
         filterRegistrationBean.setFilter(new RoleFilter(Role.ADMIN));
         filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         filterRegistrationBean.addUrlPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS);
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean userRoleFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new RoleFilter(Role.USER));
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);
-        filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);
         return filterRegistrationBean;
     }
 }

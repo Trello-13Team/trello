@@ -23,9 +23,7 @@ public class RoleFilter implements CommonAuthFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = findHttpSession(servletRequest);
 
-        Authentication authentication = (Authentication) session.getAttribute(
-                GlobalConstants.USER_AUTH
-        );
+        Authentication authentication = (Authentication) session.getAttribute(GlobalConstants.USER_AUTH);
 
         Role userRole = authentication.getRole();
         if(userRole != this.role) {

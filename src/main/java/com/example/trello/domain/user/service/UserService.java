@@ -11,6 +11,7 @@ import com.example.trello.global.entity.Role;
 import com.example.trello.global.util.PasswordEncoder;
 import com.example.trello.global.validation.PasswordValidator;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class UserService {
     }
 
     //회원가입
+    @Transactional
     public UserResponseDto createUser(UserRequestDto requestDto) {
         Pattern validPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
         Matcher validPassMatcher = validPattern.matcher(requestDto.getEmail());
@@ -47,6 +49,7 @@ public class UserService {
     }
 
     //로그인
+    @Transactional
     public Authentication loginUser(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByEmail(loginRequestDto.getEmail());
         if(user.getRole() == Role.SECESSION) {
@@ -60,6 +63,7 @@ public class UserService {
     }
 
     //회원탈퇴
+    @Transactional
     public ResponseEntity<?> deleteUser(Long id, DeleteRequestDto requestDto, HttpSession session) {
         User user = userRepository.findById(id).orElseThrow();
         if(user.getRole() == Role.SECESSION) {
