@@ -43,8 +43,10 @@ public class Card extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime dueDate;
 
-    @Column(nullable = false, updatable = false)
-    private Long boardId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
     @Column(nullable = false, updatable = false)
     private Long workspaceId;
@@ -64,13 +66,13 @@ public class Card extends BaseTimeEntity {
     private List<FileStorage> fileStorages = new ArrayList<>();
 
     @Builder
-    private Card(String title, String content, LocalDateTime dueDate, ProcessList processList, User user, Long boardId, Long workspaceId) {
+    private Card(String title, String content, LocalDateTime dueDate, ProcessList processList, User user, Board board, Long workspaceId) {
         this.title = title;
         this.content = content;
         this.dueDate = dueDate;
         this.processList = processList;
         this.user = user;
-        this.boardId = boardId;
+        this.board = board;
         this.workspaceId = workspaceId;
     }
 

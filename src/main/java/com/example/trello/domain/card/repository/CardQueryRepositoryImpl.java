@@ -31,11 +31,12 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
                 .innerJoin(card.user, user)
                 .innerJoin(card.comments, comment)
                 .where(titleContains(title), contentContains(content), dueDateEq(dueDate), responsibleUserEq(responsibleUserName))
-                .where(card.boardId.eq(boardId), card.workspaceId.eq(workspaceId))
+                .where(card.board.id.eq(boardId), card.workspaceId.eq(workspaceId))
                 .offset(pageNumber)
                 .limit(pageSize)
                 .orderBy(card.dueDate.asc())
                 .fetch();
+
 
     }
     @Override

@@ -8,6 +8,7 @@ import com.example.trello.domain.board.entity.Board;
 import com.example.trello.domain.board.repository.BoardRepository;
 import com.example.trello.domain.member.entity.Member;
 import com.example.trello.domain.workspace.entity.Workspace;
+import com.example.trello.domain.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +30,9 @@ public class BoardService {
     }
     public BoardResponseDto createBoard(Long workspaceId, BoardRequestDto boardRequestDto, Long userId) {
 
-        Workspace findworksapce = findWorkspaceById(workspaceId);
+        Workspace findworksapce = findbyIdWorkspace(workspaceId);
 
-        Board board = new Board(findworksapce,boardRequestDto.getTitle(), boardRequestDto.getColor(), boardRequestDto.getImageUrl());
+        Board board = new Board(findworksapce,boardRequestDto.getTitle(), boardRequestDto.getColor());
 
         Board savedBoard = boardRepository.save(board);
 
@@ -62,7 +63,7 @@ public class BoardService {
         Workspace findWorkspace = findbyIdWorkspace(workspaceId);
         Page<Board> boardsPages;
 
-        boardsPages = boardRepository.findAllBoards(pageable);
+        boardsPages = boardRepository.findAll(pageable);
         return boardsPages.map(FindAllBoardResponseDto::toDto);
     }
 

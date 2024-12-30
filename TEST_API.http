@@ -40,7 +40,15 @@ Content-Type: application/json
   "name" : "testworkspace",
   "description" : "test~~~"
 }
+### 보드 생성
+POST http://localhost:8080/api/v1/boards/{workspaceId}
+Content-Type: application/json
 
+{
+  "userId" : 1,
+  "name" : "testworkspace",
+  "description" : "test~~~"
+}
 ### 멤버 초대
 POST http://localhost:8080/members/test@example.com
 Content-Type: application/json

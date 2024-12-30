@@ -22,7 +22,7 @@ public class BoardResponseDto {
                 board.getId(),
                 board.getTitle(),
                 board.getColor(),
-                board.getImageUrl()
+                board.getFileStorage().getFileName()
         );
     }
 }

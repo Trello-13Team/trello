@@ -1,7 +1,8 @@
 package com.example.trello.domain.board.dto;
 
 import com.example.trello.domain.board.entity.Board;
-import com.example.trello.domain.list.dto.ListResponseDto;
+
+import com.example.trello.domain.list.dto.ProcessListResponseDto;
 import com.example.trello.domain.workspace.entity.Workspace;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
@@ -19,10 +20,10 @@ public class FindBoardResponseDto {
     private final String color;
     private final String imageUrl;
     private final List<CardResponseDto> cards;
-    private final List<ListResponseDto> lists;
+    private final List<ProcessListResponseDto> lists;
     private final LocalDateTime createdAt;
 
-    public FindBoardResponseDto(Long boardId, Workspace workspaceId, String title, String color, String imageUrl, List<CardResponseDto> cards, List<ListResponseDto> lists, LocalDateTime createdAt) {
+    public FindBoardResponseDto(Long boardId, Workspace workspaceId, String title, String color, String imageUrl, List<CardResponseDto> cards, List<ProcessListResponseDto> lists, LocalDateTime createdAt) {
         this.boardId = boardId;
         this.workspaceId = workspaceId;
         this.title = title;
@@ -44,7 +45,7 @@ public class FindBoardResponseDto {
                         .map(CardResponseDto::toDto)
                         .collect(Collectors.toList()),
                 board.getLists().stream()
-                        .map(ListResponseDto::toDto)
+                        .map(ProcessListResponseDto::toDto)
                         .collect(Collectors.toList()),
                 board.getCreatedAt()
         );

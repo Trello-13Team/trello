@@ -10,11 +10,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    Page<Board> findAllBoards(Pageable pageable);
+    Page<Board> findAll(Pageable pageable);
 
     default Board findByIdOrElseThrow(Long boardId) {
         return findById(boardId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found")
         );
     }
+}
 
