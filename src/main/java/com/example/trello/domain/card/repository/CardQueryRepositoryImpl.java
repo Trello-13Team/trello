@@ -8,7 +8,9 @@ import com.example.trello.domain.comment.entity.QComment;
 import com.example.trello.domain.member.entity.QMember;
 import com.example.trello.domain.user.entity.QUser;
 import com.example.trello.global.entity.QFileStorage;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -26,17 +28,33 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
     @Override
     public List<CardBriefInfo> searchAllCards(String title, String content, LocalDateTime dueDate, String responsibleUserName,
                                               Long boardId, Long workspaceId,Long pageNumber, Long pageSize) {
-        return queryFactory.select(new QCardBriefInfo(card.id, card.title, card.dueDate, card.user.id, card.user.name, comment.count()))
+        Expression<Long> commentCount = JPAExpressions
+                .select(comment.count())
+                .from(comment)
+                .where(comment.card.id.eq(card.id));
+        return queryFactory.select(new QCardBriefInfo(
+                        card.id,
+                        card.title,
+                        card.dueDate,
+                        card.user.id,
+                        card.user.name,
+                        commentCount
+                ))
                 .from(card)
-                .innerJoin(card.user, user)
-                .innerJoin(card.comments, comment)
-                .where(titleContains(title), contentContains(content), dueDateEq(dueDate), responsibleUserEq(responsibleUserName))
-                .where(card.board.id.eq(boardId), card.workspaceId.eq(workspaceId))
-                .offset(pageNumber)
+                .leftJoin(card.user)
+                .where(
+                        titleContains(title),
+                        contentContains(content),
+                        dueDateEq(dueDate),
+                        responsibleUserEq(responsibleUserName),
+                        boardIdEq(boardId),
+                        card.workspaceId.eq(workspaceId)
+                )
+                .offset((pageNumber) * pageSize) // Assuming pageNumber starts at 1
                 .limit(pageSize)
                 .orderBy(card.dueDate.asc())
+                .groupBy(card.id, card.title, card.dueDate, card.user.id, card.user.name) // Include all selected fields
                 .fetch();
-
     }
     @Override
     public CardDetailedInfo findCardDetailedInfoById(Long id) {
@@ -95,4 +113,10 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
         if (responsibleUserName == null) return null;
         return user.name.eq(responsibleUserName);
     }
+
+    private BooleanExpression boardIdEq(Long boardId) {
+        if (boardId == null) return null;
+        return card.board.id.eq(boardId);
+    }
+
 }

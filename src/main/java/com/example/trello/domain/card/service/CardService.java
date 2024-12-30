@@ -96,10 +96,10 @@ public class CardService {
     }
 
     @Transactional
-    public FindCardListResponseDto findCardList(Long userId, FindCardListRequestDto requestBody, Long workspaceId, Long boardId) {
+    public FindCardListResponseDto findCardList(Long userId, FindCardListRequestDto requestBody, Long workspaceId) {
         checkReadRole(workspaceId, userId);
         List<CardBriefInfo> cardBriefInfoList = cardRepository.searchAllCards(requestBody.getTitle(), requestBody.getContent()
-                , requestBody.getDueDate(),requestBody.getUserName(),boardId,workspaceId
+                , requestBody.getDueDate(),requestBody.getUserName(),requestBody.getBoardId(),workspaceId
                 , requestBody.getPageNumber()-1, requestBody.getPageSize());
 
         return new FindCardListResponseDto(cardBriefInfoList,new FindCardListResponseDto.pageInfo((long)cardBriefInfoList.size(),

@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+import java.util.OptionalLong;
+
 import static com.example.trello.global.constants.GlobalConstants.USER_AUTH;
 import static com.example.trello.global.constants.GlobalConstants.USER_ID;
 
@@ -53,10 +56,10 @@ public class CardController {
     }
 
     @GetMapping("workspaces/{workspaceId}/cards")
-    public ResponseEntity<CommonResponse<FindCardListResponseDto>> findCardList(@PathVariable("workspaceId") Long workspaceId, @RequestParam(value = "boardId", required = false) @Nullable Long boardId,
-                                                                            @SessionAttribute(USER_AUTH) Authentication auth, @RequestBody @Valid FindCardListRequestDto requestBody) {
+    public ResponseEntity<CommonResponse<FindCardListResponseDto>> findCardList(@PathVariable("workspaceId") Long workspaceId,
+                                                                                @SessionAttribute(USER_AUTH) Authentication auth, @RequestBody @Valid FindCardListRequestDto requestBody) {
 
-        return CommonResponse.success(SuccessCode.SUCCESS,cardService.findCardList(auth.getId(),requestBody,workspaceId,boardId) );
+        return CommonResponse.success(SuccessCode.SUCCESS,cardService.findCardList(auth.getId(),requestBody,workspaceId) );
     }
 
     @GetMapping("workspaces/{workspaceId}/cards/{cardId}")

@@ -41,9 +41,18 @@ public class ProcessList extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public ProcessList(String title, Integer order) {
+    public ProcessList(String title, Integer order, Board board) {
         this.title = title;
+        this.order = order;
+        this.board = board;
+    }
+
+    public void changeOrder(Integer order) {
         this.order = order;
     }
 
+    public void update(String title, Integer order) {
+        this.title = title;
+        this.order = order;
+    }
 }

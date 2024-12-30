@@ -40,15 +40,7 @@ Content-Type: application/json
   "name" : "testworkspace",
   "description" : "test~~~"
 }
-### 보드 생성
-POST http://localhost:8080/api/v1/boards/{workspaceId}
-Content-Type: application/json
 
-{
-  "userId" : 1,
-  "name" : "testworkspace",
-  "description" : "test~~~"
-}
 ### 멤버 초대
 POST http://localhost:8080/members/test@example.com
 Content-Type: application/json
@@ -69,8 +61,23 @@ Content-Type: application/json
 "role" : "user"
 }
 
+### 보드 생성
 
+POST http://localhost:8080/api/v1/boards/1
+Content-Type: application/json
 
+{
+  "title" : "board1",
+  "color" : "red"
+}
+
+### 리스트 생성
+POST http://localhost:8080/api/v1/lists/1
+Content-Type: application/json
+
+{
+  "title" : "list1"
+}
 
 ### 카드 생성
 POST http://localhost:8080/api/v1/workspaces/1/boards/1/lists/1/cards
@@ -82,14 +89,12 @@ Content-Type: application/json
   "dueDate" : "2025-01-10T12:00:00"
 }
 ### 카드 검색
-GET /api/v1/workspaces/1/cards?boardId=null HTTP/1.1
-Host: localhost:8080
+GET http://localhost:8080/api/v1/workspaces/1/cards
 Content-Type: application/json
-Cookie: JSESSIONID=2F28CBFE87C8EC91E9CBA9BA32CAACF6
-Content-Length: 10
 
 {
-
+  "pageNumber" : 1,
+  "pageSize" : 10
 }
 ### 파일 업로드
 POST /api/v1/workspaces/1/cards/1 HTTP/1.1
