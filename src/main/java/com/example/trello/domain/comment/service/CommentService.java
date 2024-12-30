@@ -45,6 +45,7 @@ public class CommentService {
         Comment comment = commentRepository.findByIdAndUser(commentId, user).orElseThrow(
                 ()-> new BaseException(ErrorCode.NOT_FOUND_COMMENT)
         );
+        comment.update(commentRequestDto.getContent());
         return  new CommentResponseDto(comment.getId(),comment.getContent(),comment.getUser().getId(),comment.getUser().getName(),comment.getCreatedAt());
     }
 

@@ -10,9 +10,7 @@ import com.example.trello.domain.comment.dto.QCommentInfo;
 import com.example.trello.domain.comment.entity.QComment;
 import com.example.trello.domain.member.entity.QMember;
 import com.example.trello.domain.user.entity.QUser;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -74,9 +72,9 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
         return card.title.contains(title);
     };
 
-    private BooleanExpression contentContains(String title) {
-        if (title == null) return null;
-        return card.title.contains(title);
+    private BooleanExpression contentContains(String content) {
+        if (content == null) return null;
+        return card.content.contains(content);
     };
 
     private BooleanExpression dueDateEq(LocalDateTime dueDate) {
