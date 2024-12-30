@@ -42,11 +42,11 @@ cloud:
     stack:
       auto: false
     s3:
-      bucket: ${BUCKET_NAME:default-bucket-name} # BUCKET_NAME 없으면 default-bucket-name 사용
+      bucket: ${BUCKET_NAME} # BUCKET_NAME 없으면 default-bucket-name 사용
     region:
-      static: ${AWS_REGION:ap-northeast-2} # AWS_REGION 없으면 ap-northeast-2 사용
+      static: ${AWS_REGION:us-east-1} # AWS_REGION 없으면 ap-northeast-2 사용
     credentials:
-      access-key: ${ACCESS_KEY:default-access-key} # ACCESS_KEY 없으면 default-access-key 사용
-      secret-key: ${SECRET_KEY:default-secret-key} # SECRET_KEY 없으면 default-secret-key 사용
+      access-key: ${ACCESS_KEY} # ACCESS_KEY 없으면 default-access-key 사용
+      secret-key: ${SECRET_KEY} # SECRET_KEY 없으면 default-secret-key 사용
 
 

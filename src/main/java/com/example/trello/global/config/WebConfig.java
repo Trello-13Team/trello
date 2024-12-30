@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 
-    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout", "/workspace/**"};
+    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout", "/workspaces/**"};
     private static final String[] ADMIN_ROLE_REQUIRED_PATH_PATTERNS = {"/workspaces/admin"};
 
     private final AuthInterceptor authInterceptor;
@@ -38,22 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     }
 
-    @Bean
-    public FilterRegistrationBean authFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new AuthFilter());
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        filterRegistrationBean.addUrlPatterns(AUTH_REQUIRED_PATH_PATTERNS);
-        return filterRegistrationBean;
-    }
 
-    @Bean
-    public FilterRegistrationBean adminFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new RoleFilter(Role.ADMIN));
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
-        filterRegistrationBean.addUrlPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS);
-        return filterRegistrationBean;
-    }
 }
 

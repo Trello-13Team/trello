@@ -49,11 +49,9 @@ public class S3Uploader {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_YYYYMMDD);
         String randomUUID = UUID.randomUUID().toString();
         String cleanedUUID = randomUUID.replace("-", "");
-
+        cleanedUUID = cleanedUUID.substring(0, 16);
         StringBuilder filePath = new StringBuilder(contentType);
-        filePath.append(File.separator).append(fileName);
-        filePath.append(File.separator).append(randomUUID);
-        filePath.append(File.separator).append(now.format(dateTimeFormatter));
+        filePath.append(fileName).append(cleanedUUID);
 
         return filePath.toString();
     }
