@@ -18,15 +18,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,7 +71,7 @@ class CardServiceTest {
         card = Card.builder().title(title).content(content).dueDate(dueDate).user(user)
                 .processList(processList).build();
 
-
+        when(workspace.getId()).thenReturn(1L);
         when(memberRepository.findByUser_IdAndWorkspace_Id(user.getId(),workspace.getId())).thenReturn(Optional.ofNullable(member));
 
 
@@ -81,12 +81,12 @@ class CardServiceTest {
 
     @Test
     void createCardSuccess() {
+        Long boardId = 1L;
         when(userRepository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
         when(processListRepository.findById(processList.getId())).thenReturn(Optional.ofNullable(processList));
         CreateCardRequestDto requestDto = new CreateCardRequestDto(card.getTitle(), card.getContent(), card.getDueDate());
         CreateCardResponseDto responseDto = new CreateCardResponseDto(card.getId(), card.getTitle(),card.getContent(),card.getDueDate());
-
-        assertThat(responseDto.equals(cardService.createCard(requestDto,user.getId(),workspace.getId(),processList.getId()))).isTrue();
+        assertThat(responseDto.equals(cardService.createCard(requestDto,user.getId(),workspace.getId(),boardId,processList.getId()))).isTrue();
     }
 
     @Test
@@ -108,6 +108,20 @@ class CardServiceTest {
         UpdateCardResponseDto responseDto = new UpdateCardResponseDto(card.getTitle(),card.getContent(),card.getDueDate());
         when(cardRepository.findById(card.getId())).thenReturn(Optional.of(card));
         assertThat(responseDto.equals(cardService.updateCard(requestDto,user.getId(),workspace.getId(), card.getId()))).isTrue();
+    }
+
+    @Test
+    void searchCardSuccess() {
+        List<CardBriefInfo> cardBriefInfoList = new ArrayList<>();
+        Long pageNumber = 1L;
+        Long pageSize = 10L;
+        CardBriefInfo cardBriefInfo = new CardBriefInfo(card.getId(),card.getTitle(),card.getDueDate(),1L,"testName",1L);
+        cardBriefInfoList.add(cardBriefInfo);
+        FindCardListResponseDto responseDto = new FindCardListResponseDto(cardBriefInfoList, new FindCardListResponseDto.pageInfo(1L,pageNumber,pageSize));
+
+        FindCardListRequestDto requestDto = new FindCardListRequestDto(card.getTitle(),card.getContent(),card.getDueDate(),"name",pageNumber,pageSize);
+        when(cardRepository.searchAllCards(any(String.class),any(String.class),any(LocalDateTime.class),any(String.class),any(Long.class),any(Long.class),any(Long.class),any(Long.class))).thenReturn(cardBriefInfoList);
+        assertThat(responseDto.equals(cardService.findCardList(user.getId(),requestDto,workspace.getId(),1L))).isTrue();
     }
 
 

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpSession;
@@ -21,11 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.trello.global.constants.GlobalConstants.USER_AUTH;
-import static com.example.trello.global.constants.GlobalConstants.USER_ID;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -54,6 +52,7 @@ class CardControllerTest {
         Long cardId = 1L;
         Long workspaceId = 1L;
         Long processListId = 1L;
+        Long boardId = 1L;
         String title = "title";
         String content = "content";
         LocalDateTime dueDate = LocalDateTime.of(2025,1,1, 0, 0, 0);
@@ -61,8 +60,8 @@ class CardControllerTest {
         CreateCardResponseDto responseDto = new CreateCardResponseDto(cardId, title,content,dueDate);
         ResponseEntity<CommonResponse<CreateCardResponseDto>> responseEntity = CommonResponse.success(SuccessCode.SUCCESS_INSERT, responseDto);
 
-        when(cardService.createCard(any(CreateCardRequestDto.class),any(Long.class),any(Long.class),any(Long.class))).thenReturn(responseDto);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/workspaces/1/lists/1/cards")
+        when(cardService.createCard(any(CreateCardRequestDto.class),any(Long.class),any(Long.class),any(Long.class),any(Long.class))).thenReturn(responseDto);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/workspaces/1/boards/1/lists/1/cards")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
@@ -71,7 +70,7 @@ class CardControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responseEntity.getBody())));
 
         verify(cardService, times(1))
-                .createCard(any(CreateCardRequestDto.class), eq(1L), eq(1L), eq(1L));
+                .createCard(any(CreateCardRequestDto.class), eq(userId), eq(workspaceId) ,eq(boardId), eq(processListId));
 
     }
 
@@ -124,7 +123,7 @@ class CardControllerTest {
     }
 
     @Test
-    void deleteCard() throws Exception {
+    void deleteCardSuccess() throws Exception {
         Long cardId = 1L;
         DeleteCardResponseDto responseDto = new DeleteCardResponseDto(cardId);
         ResponseEntity<CommonResponse<DeleteCardResponseDto>> responseEntity =
@@ -138,5 +137,35 @@ class CardControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responseEntity.getBody())));
         verify(cardService, times(1))
                 .deleteCard(eq(1L), eq(1L), eq(1L));
+    }
+
+    @Test
+    void  findCardListSuccess() throws Exception {
+        Long cardId = 1L;
+        String cardTitle = "title";
+        String cardContent = "content";
+        Long userId = 1L;
+        String userName = "userName";
+        Long commentCount = 1L;
+        LocalDateTime dueDate = LocalDateTime.of(2025,1,1, 0, 0, 0);
+        Long pageNumber = 1L;
+        Long pageSize = 10L;
+        List<CardBriefInfo> cardBriefInfoList = new ArrayList<>();
+        CardBriefInfo cardBriefInfo = new CardBriefInfo(cardId,cardTitle,dueDate,userId,userName,commentCount);
+        FindCardListRequestDto requestDto = new FindCardListRequestDto(cardTitle,cardContent,dueDate,"name",pageNumber,pageSize);
+        FindCardListResponseDto responseDto = new FindCardListResponseDto(cardBriefInfoList, new FindCardListResponseDto.pageInfo(1L,pageNumber,pageSize));
+        ResponseEntity<CommonResponse<FindCardListResponseDto>> responseEntity = CommonResponse.success(SuccessCode.SUCCESS, responseDto);
+        when(cardService.findCardList(any(Long.class),any(FindCardListRequestDto.class),any(Long.class),any(Long.class))).thenReturn(responseDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/workspaces/1/boards/1/lists/1/cards/1")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responseEntity.getBody())));
+
+        verify(cardService, times(1))
+                .findCardList(eq(userId), any(FindCardListRequestDto.class),eq(1L), eq(1L));
     }
 }
