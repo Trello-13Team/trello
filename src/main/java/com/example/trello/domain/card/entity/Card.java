@@ -83,9 +83,7 @@ public class Card extends BaseTimeEntity {
     }
 
     public void switchProcessList(ProcessList processList) {
-        this.processList.getCards().remove(this);
         this.processList = processList;
-        processList.getCards().add(this);
     }
 
 
