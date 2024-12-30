@@ -6,6 +6,7 @@ import com.example.trello.domain.user.entity.User;
 import com.example.trello.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -42,5 +43,16 @@ public class Workspace extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    @Builder
+    public Workspace(String name, String description, User user) {
+        this.user = user;
+        this.name = name;
+        this.description = description;
+    }
+
+    public void updateWorkspace(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
 }

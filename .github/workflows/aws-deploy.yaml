@@ -42,6 +42,10 @@ jobs:
           DATABASE_ID: ${{ secrets.DATABASE_ID }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
+          BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+          AWS_REGION: ${{secrets.AWS_REGION}}
+          ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
         run: |
           echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
           docker build \
@@ -73,6 +77,10 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DATABASE_USERNAME: ${{ secrets.DATABASE_ID }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+          AWS_REGION: ${{secrets.AWS_REGION}}
+          ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
           script: |
             echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin
@@ -84,5 +92,9 @@ jobs:
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               -e DATABASE_USERNAME=${{ secrets.DATABASE_ID }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+              -e BUCKET_NAME=${{secrets.BUCKET_NAME}} \
+              -e AWS_REGION=${{secrets.AWS_REGION}} \
+              -e ACCESS_KEY=${{secrets.AWS_ACCESS_KEY}} \
+              -e SECRET_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} \
               -p 8080:8080 "${{secrets.DOCKER_HUB_REPOSITORY}}":main
           

@@ -40,3 +40,5 @@ out/
 
 jacoco/
 
+*.http
+

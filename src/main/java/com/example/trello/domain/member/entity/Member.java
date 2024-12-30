@@ -5,6 +5,7 @@ import com.example.trello.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import jdk.dynalink.beans.StaticClass;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -32,8 +33,16 @@ public class Member {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
+    public Member(MemberRole role, Workspace workspace, User user) {
+        this.role = role;
+        this.workspace = workspace;
+        this.user = user;
+
+    }
 
     public enum MemberRole{
-        ADMIN, DEVELOPER, MANAGER;
+        WORKSPACE, BOARD, READONLY;
     }
+
 }

@@ -1,8 +1,11 @@
 package com.example.trello.domain.board.entity;
 
+import com.example.trello.domain.board.dto.BoardRequestDto;
 import com.example.trello.domain.card.entity.Card;
+import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.workspace.entity.Workspace;
 import com.example.trello.global.entity.BaseTimeEntity;
+import com.example.trello.global.entity.FileStorage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,17 +35,34 @@ public class Board extends BaseTimeEntity {
     @Length(min = 1, max = 200)
     private String color;
 
-    @Column(nullable = false, length = 255)
-    @Length(min = 1, max = 200)
-    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id")
     private Workspace workspace;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProcessList> lists = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Card> cards = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn
+    private FileStorage fileStorage = null;
 
+    public Board(Workspace workspace,String title, String color) {
+        this.workspace = workspace;
+        this.title = title;
+        this.color = color;
+    }
 
+    public void updateBoard(BoardRequestDto boardRequestDto) {
+        this.title = boardRequestDto.getTitle();
+        this.color = boardRequestDto.getColor();
+    }
+
+    public void changeImage(FileStorage fileStorage) {
+        this.fileStorage = fileStorage;
+    }
 }
