@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.trello.global.constants.GlobalConstants.USER_AUTH;
-import static com.example.trello.global.constants.GlobalConstants.USER_ID;
 
 @RestController()
 @RequestMapping("api/v1")
@@ -21,11 +20,11 @@ import static com.example.trello.global.constants.GlobalConstants.USER_ID;
 public class CardController {
     private final CardService cardService;
 
-    @PostMapping("workspaces/{workspaceId}/lists/{listId}/cards")
-    public ResponseEntity<CommonResponse<CreateCardResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @RequestBody @Valid CreateCardRequestDto requestDto,
+    @PostMapping("workspaces/{workspaceId}/boards/{boardId}/lists/{listId}/cards")
+    public ResponseEntity<CommonResponse<CreateCardResponseDto>> createCard(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("boardId") Long boardId, @RequestBody @Valid CreateCardRequestDto requestDto,
                                                             @SessionAttribute(USER_AUTH) Authentication auth) {
 
-        return CommonResponse.success(SuccessCode.SUCCESS_INSERT,cardService.createCard(requestDto, auth.getId(), workspaceId,listId) );
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT,cardService.createCard(requestDto, auth.getId(), workspaceId, boardId, listId) );
     }
 
     @PatchMapping("workspaces/{workspaceId}/lists/{listId}/cards/{cardId}")
@@ -48,6 +47,21 @@ public class CardController {
 
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE,cardService.deleteCard(auth.getId(), workspaceId, cardId) );
     }
+
+    @GetMapping("workspaces/{workspaceId}/boards/{boardId}/lists/{listId}/cards/{cardId}")
+    public ResponseEntity<CommonResponse<FindCardListResponseDto>> findCardList(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("boardId") Long boardId , @PathVariable("cardId") Long cardId,
+                                                                            @SessionAttribute(USER_AUTH) Authentication auth, @RequestBody @Valid FindCardListRequestDto requestBody) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS,cardService.findCardList(auth.getId(),requestBody,workspaceId,boardId) );
+    }
+
+    @GetMapping("workspaces/{workspaceId}/cards/{cardId}")
+
+    public ResponseEntity<CommonResponse<CardDetailedInfo>> findCardDetail(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, @SessionAttribute(USER_AUTH) Authentication auth) {
+        return CommonResponse.success(SuccessCode.SUCCESS, cardService.findCardDetailedInfo(auth.getId(),workspaceId,cardId) );
+    }
+
+
 
 }
 

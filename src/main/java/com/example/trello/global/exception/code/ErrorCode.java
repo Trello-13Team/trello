@@ -30,12 +30,15 @@ public enum ErrorCode {
     NOT_FOUND_PROCESSLIST(HttpStatus.NOT_FOUND, "ProcessList를 찾을 수 없습니다"),
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "User를 찾을 수 없습니다"),
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "Card를 찾을 수 없습니다"),
+    NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "Board를 찾을 수 없습니다" ),
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "Comment를 찾을 수 없습니다"),
     /**
      * unAuthorized
      */
     NOT_ALLOW_USER(HttpStatus.UNAUTHORIZED, "USER 권한은 사용할 수 없는 기능입니다"),
     NOT_ALLOW_DEVELOPER(HttpStatus.UNAUTHORIZED, "DEVELOPER 역할은 사용할 수 없는 기능입니다"),
     NOT_ALLOW_MANAGER(HttpStatus.UNAUTHORIZED, "MANAGER 역할은 사용할 수 없는 기능입니다");
+
     private final HttpStatus httpStatus;
     private final String message;
 }

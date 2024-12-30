@@ -1,5 +1,7 @@
 package com.example.trello.domain.card.service;
 
+import com.example.trello.domain.board.entity.Board;
+import com.example.trello.domain.board.repository.BoardRepository;
 import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.card.repository.CardRepository;
@@ -10,13 +12,13 @@ import com.example.trello.domain.member.repository.MemberRepository;
 import com.example.trello.domain.user.entity.User;
 import com.example.trello.domain.user.repository.UserRepository;
 import com.example.trello.global.exception.BaseException;
-import com.example.trello.global.exception.UnauthorizedException;
 import com.example.trello.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,21 +27,25 @@ public class CardService {
     private final ProcessListRepository processListRepository;
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
     @Transactional
-    public CreateCardResponseDto createCard(CreateCardRequestDto requestDto,Long userId ,Long workspaceId, Long processListId) {
+    public CreateCardResponseDto createCard(CreateCardRequestDto requestDto,Long userId ,Long workspaceId, Long boardId,Long processListId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_USER)
         );
         ProcessList processList = processListRepository.findById(processListId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_PROCESSLIST)
         );
+
         checkWriteRole(workspaceId, userId);
         Card card = Card.builder()
                 .title(requestDto.getTitle())
                 .user(user)
                 .content(requestDto.getContent())
                 .dueDate(requestDto.getDueDate())
+                .boardId(boardId)
+                .workspaceId(workspaceId)
                 .processList(processList)
                 .build();
         cardRepository.save(card);
@@ -80,6 +86,24 @@ public class CardService {
         return new DeleteCardResponseDto(cardId);
     }
 
+    @Transactional
+    public FindCardListResponseDto findCardList(Long userId, FindCardListRequestDto requestBody, Long workspaceId, Long boardId) {
+        checkReadRole(workspaceId, userId);
+        List<CardBriefInfo> cardBriefInfoList = cardRepository.searchAllCards(requestBody.getTitle(), requestBody.getContent()
+                , requestBody.getDueDate(),requestBody.getUserName(),boardId,workspaceId
+                , requestBody.getPageNumber()-1, requestBody.getPageSize());
+
+        return new FindCardListResponseDto(cardBriefInfoList,new FindCardListResponseDto.pageInfo((long)cardBriefInfoList.size(),
+                requestBody.getPageNumber(), requestBody.getPageSize()));
+    }
+
+    @Transactional
+    public CardDetailedInfo findCardDetailedInfo(Long userId, Long workspace, Long cardId) {
+        checkReadRole(workspace,userId);
+
+        return cardRepository.searchCardDetailedInfo(cardId);
+    }
+
 
 
     private void checkWriteRole(Long workspaceId, Long userId) {
@@ -89,6 +113,12 @@ public class CardService {
         if(member.getRole() == Member.MemberRole.MANAGER ){
             throw new BaseException(ErrorCode.NOT_ALLOW_MANAGER);
         }
+    }
+
+    private void checkReadRole(Long workspaceId, Long userId) {
+        Member member = memberRepository.findByUser_IdAndWorkspace_Id(userId, workspaceId).orElseThrow(
+                () -> new BaseException(ErrorCode.NOT_FOUND_MEMBER)
+        );
     }
 
 

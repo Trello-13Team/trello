@@ -3,8 +3,11 @@ package com.example.trello.global.dto;
 import com.example.trello.global.entity.Role;
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
-public class Authentication {
+public class
+Authentication {
 
     private final Long id;
     private final Role role;
