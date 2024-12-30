@@ -1,5 +1,6 @@
 package com.example.trello.domain.board.entity;
 
+import com.example.trello.domain.board.dto.BoardRequestDto;
 import com.example.trello.domain.card.entity.Card;
 import com.example.trello.domain.list.entity.ProcessList;
 import com.example.trello.domain.workspace.entity.Workspace;
@@ -42,8 +43,22 @@ public class Board extends BaseTimeEntity {
     private Workspace workspace;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProcessList> processLists = new ArrayList<>();
+    private List<ProcessList> lists = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Card> cards = new ArrayList<>();
 
+    public Board(Workspace workspace,String title, String color, String imageUrl) {
+        this.workspace = workspace;
+        this.title = title;
+        this.color = color;
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateBoard(BoardRequestDto boardRequestDto) {
+        this.title = boardRequestDto.getTitle();
+        this.color = boardRequestDto.getColor();
+        this.imageUrl = boardRequestDto.getImageUrl();
+    }
 }
