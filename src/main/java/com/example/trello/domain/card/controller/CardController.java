@@ -3,6 +3,7 @@ package com.example.trello.domain.card.controller;
 import com.example.trello.domain.card.dto.*;
 import com.example.trello.domain.card.service.CardService;
 import com.example.trello.global.dto.Authentication;
+import com.example.trello.global.dto.UploadFileInfo;
 import com.example.trello.global.exception.code.SuccessCode;
 import com.example.trello.global.response.CommonResponse;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.example.trello.global.constants.GlobalConstants.USER_AUTH;
 
@@ -56,12 +58,23 @@ public class CardController {
     }
 
     @GetMapping("workspaces/{workspaceId}/cards/{cardId}")
-
     public ResponseEntity<CommonResponse<CardDetailedInfo>> findCardDetail(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, @SessionAttribute(USER_AUTH) Authentication auth) {
         return CommonResponse.success(SuccessCode.SUCCESS, cardService.findCardDetailedInfo(auth.getId(),workspaceId,cardId) );
     }
 
+    @PostMapping("workspaces/{workspaceId}/cards/{cardId}")
+    public ResponseEntity<CommonResponse<UploadFileInfo>> uploadFile(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, MultipartFile file, @SessionAttribute(USER_AUTH) Authentication auth) {
+        return CommonResponse.success(SuccessCode.SUCCESS, cardService.uploadFile(auth.getId(),workspaceId, cardId, file) );
+    }
 
+    @GetMapping("workspaces/{workspaceId}/cards/{cardId}/files")
+    public ResponseEntity<CommonResponse<FindFileResponseDto>> findFiles(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId, @SessionAttribute(USER_AUTH) Authentication auth) {
+        return CommonResponse.success(SuccessCode.SUCCESS, cardService.getFileMetaData(auth.getId(),workspaceId, cardId) );
+    }
 
+    @DeleteMapping("workspaces/{workspaceId}/cards/{cardId}/files/{fileId}")
+    public ResponseEntity<CommonResponse<DeleteFileResponseDto>> deleteFile(@PathVariable("cardId") Long cardId, @PathVariable("workspaceId") Long workspaceId,  @PathVariable("fileId") Long fileId, @SessionAttribute(USER_AUTH) Authentication auth) {
+        return CommonResponse.success(SuccessCode.SUCCESS, cardService.deleteFile(auth.getId(),workspaceId, fileId) );
+    }
 }
 
