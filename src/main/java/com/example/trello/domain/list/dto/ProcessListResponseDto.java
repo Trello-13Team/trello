@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class ProcessListResponseDto {
     private final Long id;
-    private final Board boardId;
+    private final Long boardId;
     private final String title;
     private final Integer order;
 
-    public ProcessListResponseDto(Long id, Board boardId, String title, Integer order) {
+    public ProcessListResponseDto(Long id, Long boardId, String title, Integer order) {
         this.id = id;
         this.boardId = boardId;
         this.title = title;
@@ -21,7 +21,7 @@ public class ProcessListResponseDto {
     public static ProcessListResponseDto toDto(ProcessList processList) {
         return new ProcessListResponseDto(
                 processList.getId(),
-                processList.getBoard(),
+                processList.getBoard().getId(),
                 processList.getTitle(),
                 processList.getOrder()
         );

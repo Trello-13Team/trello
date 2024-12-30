@@ -49,7 +49,7 @@ public class Board extends BaseTimeEntity {
 
     @OneToOne
     @JoinColumn
-    private FileStorage fileStorage;
+    private FileStorage fileStorage = null;
 
     public Board(Workspace workspace,String title, String color) {
         this.workspace = workspace;
