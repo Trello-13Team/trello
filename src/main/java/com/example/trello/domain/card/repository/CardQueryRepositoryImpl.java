@@ -74,6 +74,7 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
                 ))
                 .from(card)
                 .leftJoin(card.user, user)
+                .where(card.id.eq(id))
                 .fetchOne();
         if(cardDetailedInfo != null) {
             cardDetailedInfo.setComments(commentInfoList);

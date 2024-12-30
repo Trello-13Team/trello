@@ -55,7 +55,7 @@ public class BoardController {
     }
 
     // 보드 다건 조회
-    @GetMapping("/boards/{workspaceId}")
+    @GetMapping("/workspaces/{workspaceId}/boards")
     public ResponseEntity<Page<FindAllBoardResponseDto>> findAllBoard(
             @PageableDefault(page = 1)
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
