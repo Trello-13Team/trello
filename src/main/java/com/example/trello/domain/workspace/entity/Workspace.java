@@ -44,11 +44,15 @@ public class Workspace extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Builder
     public Workspace(String name, String description, User user) {
+        this.user = user;
         this.name = name;
         this.description = description;
-        this.user = user;
+    }
+
+    public void updateWorkspace(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
 }
