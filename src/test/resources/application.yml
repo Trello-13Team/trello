@@ -38,7 +38,7 @@ cloud:
       bucket : ${BUCKET_NAME}
       base-url: ${BASE_URL}
     region:
-      static: ap-northeast-2
+      static: ${AWS_REGION:us-east-1}
     stack:
       auto: false
     credentials:
