@@ -33,6 +33,7 @@ public class Member {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
     public Member(MemberRole role, Workspace workspace, User user) {
         this.role = role;
         this.workspace = workspace;

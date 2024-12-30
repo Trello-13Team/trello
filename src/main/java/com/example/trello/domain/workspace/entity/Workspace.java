@@ -43,7 +43,7 @@ public class Workspace extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
+    @Builder
     public Workspace(String name, String description, User user) {
         this.user = user;
         this.name = name;
