@@ -62,6 +62,8 @@ Content-Type: application/json
 }
 
 
+
+
 ### 카드 생성
 POST http://localhost:8080/api/v1/workspaces/1/boards/1/lists/1/cards
 Content-Type: application/json
@@ -71,7 +73,16 @@ Content-Type: application/json
   "content" : "card",
   "dueDate" : "2025-01-10T12:00:00"
 }
+### 카드 검색
+GET /api/v1/workspaces/1/cards?boardId=null HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Cookie: JSESSIONID=2F28CBFE87C8EC91E9CBA9BA32CAACF6
+Content-Length: 10
 
+{
+
+}
 ### 파일 업로드
 POST /api/v1/workspaces/1/cards/1 HTTP/1.1
 Host: localhost:8080
@@ -84,4 +95,12 @@ Content-Disposition: form-data; name="file"; filename="picture.jpg"
 Content-Type: image/jpeg
 
 < C:/Users/thdwj/Desktop/picture.jpg
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
+------WebKitFormBoundary7MA4YWxkTrZu0gW---
+
+### 파일 조회
+GET http://localhost:8080/api/v1/workspaces/1/cards/1/files
+Content-Type: application/json
+
+### 파일 삭제
+DELETE http://localhost:8080/api/v1/workspaces/1/cards/1/files/1
+Content-Type: application/json

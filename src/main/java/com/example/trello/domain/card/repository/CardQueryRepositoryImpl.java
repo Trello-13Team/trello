@@ -30,7 +30,7 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
                 .from(card)
                 .innerJoin(card.user, user)
                 .innerJoin(card.comments, comment)
-                .where(titleContains(title), contentContains(content), dueDateEq(dueDate), responsibleUserEq(responsibleUserName))
+                .where(titleContains(title), contentContains(content), dueDateAfter(dueDate), responsibleUserEq(responsibleUserName))
                 .where(card.boardId.eq(boardId), card.workspaceId.eq(workspaceId))
                 .offset(pageNumber)
                 .limit(pageSize)
@@ -67,10 +67,11 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
     @Override
     public List<FileMetaDataDto> findMetaDataDtoByCardId(Long cardId) {
 
-        return queryFactory.select(new QFileMetaDataDto(fileStorage.id, fileStorage.fileName, fileStorage.fileKey, fileStorage.fileSize, fileStorage.uploadedAt))
+        return queryFactory.select(new QFileMetaDataDto(fileStorage.id, fileStorage.fileUrl, fileStorage.fileKey, fileStorage.fileSize, fileStorage.uploadedAt))
                 .from(fileStorage)
                 .where(fileStorage.card.id.eq(cardId))
                 .fetch();
+
 
     }
 
@@ -85,9 +86,9 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
         return card.content.contains(content);
     };
 
-    private BooleanExpression dueDateEq(LocalDateTime dueDate) {
+    private BooleanExpression dueDateAfter(LocalDateTime dueDate) {
         if (dueDate == null) return null;
-        return card.dueDate.eq(dueDate);
+        return card.dueDate.after(dueDate);
     }
 
     private BooleanExpression responsibleUserEq(String responsibleUserName) {

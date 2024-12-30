@@ -117,9 +117,9 @@ public class CardService {
                 () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
         );
         UploadFileInfo fileInfo = s3Service.uploadFile(file);
-        FileStorage fileStorage = FileStorage.builder().fileKey(fileInfo.fileUrl()).fileName(file.getName()).fileSize(file.getSize()).card(card).build();
+        FileStorage fileStorage = FileStorage.builder().fileKey(fileInfo.fileKey()).fileUrl(fileInfo.fileUrl()).fileSize(file.getSize()).card(card).build();
         fileRepository.save(fileStorage);
-        return new UploadFileInfo(fileStorage.getFileKey());
+        return new UploadFileInfo(fileStorage.getFileUrl(), fileStorage.getFileKey());
     }
 
     @Transactional

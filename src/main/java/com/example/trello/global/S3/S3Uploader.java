@@ -40,7 +40,7 @@ public class S3Uploader {
         } catch (Exception e) {
             throw new BaseException(ErrorCode.S3_UPLOADER_ERROR);
         }
-        return new UploadFileInfo(getUrlFromBucket(filePath));
+        return new UploadFileInfo(getUrlFromBucket(filePath),filePath);
     }
 
     // s3에 들어갈 파일의 path 설정
