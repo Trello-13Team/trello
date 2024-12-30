@@ -40,5 +40,6 @@ out/
 
 jacoco/
 
-*.http
+AWS_TEST.http.http
+LOCAL_TEST.http
 
