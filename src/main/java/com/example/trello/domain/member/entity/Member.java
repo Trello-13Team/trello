@@ -4,7 +4,10 @@ import com.example.trello.domain.user.entity.User;
 import com.example.trello.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import jdk.dynalink.beans.StaticClass;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -12,6 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +27,21 @@ public class Member {
 
     @ManyToOne
     @JoinColumn(name = "workspace_id")
-    private Workspace workSpace;
+    private Workspace workspace;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Member(MemberRole role, Workspace workspace, User user) {
+        this.role = role;
+        this.workspace = workspace;
+        this.user = user;
+
+    }
 
     public enum MemberRole{
-        ADMIN, DEVELOPER, MANAGER;
+        WORKSPACE, BOARD, READONLY;
     }
+
 }

@@ -23,7 +23,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (session.getAttribute(GlobalConstants.USER_AUTH) == null) {
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
         }
-
         return true;
     }
 }
