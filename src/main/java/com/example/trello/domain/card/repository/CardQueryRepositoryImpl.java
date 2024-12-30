@@ -67,10 +67,11 @@ public class CardQueryRepositoryImpl implements CardQueryRepository {
     @Override
     public List<FileMetaDataDto> findMetaDataDtoByCardId(Long cardId) {
 
-        return queryFactory.select(new QFileMetaDataDto(fileStorage.id, fileStorage.fileName, fileStorage.fileKey, fileStorage.fileSize, fileStorage.uploadedAt))
+        return queryFactory.select(new QFileMetaDataDto(fileStorage.id, fileStorage.fileUrl, fileStorage.fileKey, fileStorage.fileSize, fileStorage.uploadedAt))
                 .from(fileStorage)
                 .where(fileStorage.card.id.eq(cardId))
                 .fetch();
+
 
     }
 
