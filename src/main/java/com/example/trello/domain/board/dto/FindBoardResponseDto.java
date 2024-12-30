@@ -15,20 +15,18 @@ import java.util.stream.Collectors;
 public class FindBoardResponseDto {
 
     private final Long boardId;
-    private final Workspace workspaceId;
+    private final Long workspaceId;
     private final String title;
     private final String color;
-    private final String imageUrl;
     private final List<CardResponseDto> cards;
     private final List<ProcessListResponseDto> lists;
     private final LocalDateTime createdAt;
 
-    public FindBoardResponseDto(Long boardId, Workspace workspaceId, String title, String color, String imageUrl, List<CardResponseDto> cards, List<ProcessListResponseDto> lists, LocalDateTime createdAt) {
+    public FindBoardResponseDto(Long boardId, Long workspaceId, String title, String color, List<CardResponseDto> cards, List<ProcessListResponseDto> lists, LocalDateTime createdAt) {
         this.boardId = boardId;
         this.workspaceId = workspaceId;
         this.title = title;
         this.color = color;
-        this.imageUrl = imageUrl;
         this.cards = cards;
         this.lists = lists;
         this.createdAt = createdAt;
@@ -37,10 +35,9 @@ public class FindBoardResponseDto {
     public static FindBoardResponseDto toDto(Board board) {
         return new FindBoardResponseDto(
                 board.getId(),
-                board.getWorkspace(),
+                board.getWorkspace().getId(),
                 board.getTitle(),
                 board.getColor(),
-                board.getFileStorage().getFileUrl(),
                 board.getCards().stream()
                         .map(CardResponseDto::toDto)
                         .collect(Collectors.toList()),

@@ -24,13 +24,13 @@ public class CommentController {
     @PostMapping("/workspaces/{workspaceId}/cards/{cardId}/comments")
     public ResponseEntity<CommonResponse<CommentResponseDto>> createComment(@PathVariable("workspaceId") Long workspaceId, @PathVariable("cardId") Long cardId,
                                                                             @RequestBody @Valid CommentRequestDto commentRequestDto, @SessionAttribute(USER_AUTH) Authentication auth) {
-        return CommonResponse.success(SuccessCode.SUCCESS_DELETE, commentService.createComment(workspaceId,auth.getId(),cardId,commentRequestDto));
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT, commentService.createComment(workspaceId,auth.getId(),cardId,commentRequestDto));
     }
 
     @PutMapping("/workspaces/{workspaceId}/comments/{commentId}")
     public ResponseEntity<CommonResponse<CommentResponseDto>> updateComment(@PathVariable("workspaceId") Long workspaceId, @PathVariable("commentId") Long commentId,
                                                                             @RequestBody @Valid CommentRequestDto commentRequestDto, @SessionAttribute(USER_AUTH) Authentication auth) {
-        return CommonResponse.success(SuccessCode.SUCCESS_DELETE, commentService.updateComment(workspaceId,auth.getId(),commentId,commentRequestDto));
+        return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, commentService.updateComment(workspaceId,auth.getId(),commentId,commentRequestDto));
     }
 
     @DeleteMapping("/workspaces/{workspaceId}/comments/{commentId}")

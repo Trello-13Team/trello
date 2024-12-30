@@ -40,4 +40,5 @@ out/
 
 jacoco/
 
-.AWS_TEST_API.http
+*.http
+
