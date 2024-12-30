@@ -40,15 +40,7 @@ Content-Type: application/json
   "name" : "testworkspace",
   "description" : "test~~~"
 }
-### 보드 생성
-POST http://localhost:8080/api/v1/boards/{workspaceId}
-Content-Type: application/json
 
-{
-  "userId" : 1,
-  "name" : "testworkspace",
-  "description" : "test~~~"
-}
 ### 멤버 초대
 POST http://localhost:8080/members/test@example.com
 Content-Type: application/json
@@ -69,6 +61,23 @@ Content-Type: application/json
 "role" : "user"
 }
 
+### 보드 생성
+
+POST http://localhost:8080/api/v1/boards/1
+Content-Type: application/json
+
+{
+  "title" : "board1",
+  "color" : "red"
+}
+
+### 리스트 생성
+POST http://localhost:8080/api/v1/lists/1
+Content-Type: application/json
+
+{
+  "title" : "list1"
+}
 
 ### 카드 생성
 POST http://localhost:8080/api/v1/workspaces/1/boards/1/lists/1/cards
@@ -79,7 +88,14 @@ Content-Type: application/json
   "content" : "card",
   "dueDate" : "2025-01-10T12:00:00"
 }
+### 카드 검색
+GET http://localhost:8080/api/v1/workspaces/1/cards
+Content-Type: application/json
 
+{
+  "pageNumber" : 1,
+  "pageSize" : 10
+}
 ### 파일 업로드
 POST /api/v1/workspaces/1/cards/1 HTTP/1.1
 Host: localhost:8080
@@ -92,4 +108,14 @@ Content-Disposition: form-data; name="file"; filename="picture.jpg"
 Content-Type: image/jpeg
 
 < C:/Users/thdwj/Desktop/picture.jpg
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
+------WebKitFormBoundary7MA4YWxkTrZu0gW---
+
+
+
+### 파일 조회
+GET http://localhost:8080/api/v1/workspaces/1/cards/1/files
+Content-Type: application/json
+
+### 파일 삭제
+DELETE http://localhost:8080/api/v1/workspaces/1/cards/1/files/1
+Content-Type: application/json

@@ -40,7 +40,7 @@ public class FindBoardResponseDto {
                 board.getWorkspace(),
                 board.getTitle(),
                 board.getColor(),
-                board.getImageUrl(),
+                board.getFileStorage().getFileUrl(),
                 board.getCards().stream()
                         .map(CardResponseDto::toDto)
                         .collect(Collectors.toList()),

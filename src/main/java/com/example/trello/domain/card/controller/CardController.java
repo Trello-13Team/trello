@@ -6,6 +6,7 @@ import com.example.trello.global.dto.Authentication;
 import com.example.trello.global.dto.UploadFileInfo;
 import com.example.trello.global.exception.code.SuccessCode;
 import com.example.trello.global.response.CommonResponse;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
+import java.util.OptionalLong;
 
 import static com.example.trello.global.constants.GlobalConstants.USER_AUTH;
 import static com.example.trello.global.constants.GlobalConstants.USER_ID;
@@ -51,11 +55,11 @@ public class CardController {
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE,cardService.deleteCard(auth.getId(), workspaceId, cardId) );
     }
 
-    @GetMapping("workspaces/{workspaceId}/boards/{boardId}/lists/{listId}/cards/{cardId}")
-    public ResponseEntity<CommonResponse<FindCardListResponseDto>> findCardList(@PathVariable("listId") Long listId, @PathVariable("workspaceId") Long workspaceId, @PathVariable("boardId") Long boardId , @PathVariable("cardId") Long cardId,
-                                                                            @SessionAttribute(USER_AUTH) Authentication auth, @RequestBody @Valid FindCardListRequestDto requestBody) {
+    @GetMapping("workspaces/{workspaceId}/cards")
+    public ResponseEntity<CommonResponse<FindCardListResponseDto>> findCardList(@PathVariable("workspaceId") Long workspaceId,
+                                                                                @SessionAttribute(USER_AUTH) Authentication auth, @RequestBody @Valid FindCardListRequestDto requestBody) {
 
-        return CommonResponse.success(SuccessCode.SUCCESS,cardService.findCardList(auth.getId(),requestBody,workspaceId,boardId) );
+        return CommonResponse.success(SuccessCode.SUCCESS,cardService.findCardList(auth.getId(),requestBody,workspaceId) );
     }
 
     @GetMapping("workspaces/{workspaceId}/cards/{cardId}")

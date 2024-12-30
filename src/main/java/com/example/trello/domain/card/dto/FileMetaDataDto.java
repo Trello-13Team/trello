@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 @Getter
 public class FileMetaDataDto {
     private Long id;
-    private String fileName;
+    private String fileUrl;
     private String fileKey;
     private Long fileSize;
     private LocalDateTime uploadedAt;
     @QueryProjection
-    public FileMetaDataDto(Long id, String fileName, String fileKey, Long fileSize, LocalDateTime uploadedAt) {
+    public FileMetaDataDto(Long id, String fileUrl, String fileKey, Long fileSize, LocalDateTime uploadedAt) {
         this.id = id;
-        this.fileName = fileName;
+        this.fileUrl = fileUrl;
         this.fileKey = fileKey;
         this.fileSize = fileSize;
         this.uploadedAt = uploadedAt;

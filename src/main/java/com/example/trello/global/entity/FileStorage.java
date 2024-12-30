@@ -21,7 +21,7 @@ public class FileStorage {
     private Long id;
 
     @Column
-    private String fileName;
+    private String fileUrl;
 
     @Column
     @Lob
@@ -42,8 +42,8 @@ public class FileStorage {
     private Card card;
 
     @Builder
-    public FileStorage(String fileName, String fileKey, String contentType, Long fileSize, Card card) {
-        this.fileName = fileName;
+    public FileStorage(String fileUrl, String fileKey, String contentType, Long fileSize, Card card) {
+        this.fileUrl = fileUrl;
         this.fileKey = fileKey;
         this.contentType = contentType;
         this.fileSize = fileSize;

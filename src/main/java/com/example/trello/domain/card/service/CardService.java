@@ -96,10 +96,10 @@ public class CardService {
     }
 
     @Transactional
-    public FindCardListResponseDto findCardList(Long userId, FindCardListRequestDto requestBody, Long workspaceId, Long boardId) {
+    public FindCardListResponseDto findCardList(Long userId, FindCardListRequestDto requestBody, Long workspaceId) {
         checkReadRole(workspaceId, userId);
         List<CardBriefInfo> cardBriefInfoList = cardRepository.searchAllCards(requestBody.getTitle(), requestBody.getContent()
-                , requestBody.getDueDate(),requestBody.getUserName(),boardId,workspaceId
+                , requestBody.getDueDate(),requestBody.getUserName(),requestBody.getBoardId(),workspaceId
                 , requestBody.getPageNumber()-1, requestBody.getPageSize());
 
         return new FindCardListResponseDto(cardBriefInfoList,new FindCardListResponseDto.pageInfo((long)cardBriefInfoList.size(),
@@ -120,9 +120,9 @@ public class CardService {
                 () -> new BaseException(ErrorCode.NOT_FOUND_CARD)
         );
         UploadFileInfo fileInfo = s3Service.uploadFile(file);
-        FileStorage fileStorage = FileStorage.builder().fileKey(fileInfo.fileUrl()).fileName(file.getName()).fileSize(file.getSize()).card(card).build();
+        FileStorage fileStorage = FileStorage.builder().fileKey(fileInfo.fileKey()).fileUrl(fileInfo.fileUrl()).fileSize(file.getSize()).card(card).build();
         fileRepository.save(fileStorage);
-        return new UploadFileInfo(fileStorage.getFileKey());
+        return new UploadFileInfo(fileStorage.getFileUrl(), fileStorage.getFileKey());
     }
 
     @Transactional

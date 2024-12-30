@@ -31,7 +31,7 @@ public class FindAllBoardResponseDto {
                 board.getId(),
                 board.getTitle(),
                 board.getColor(),
-                board.getImageUrl(),
+                board.getFileStorage().getFileUrl(),
                 board.getCreatedAt()
         );
     }
