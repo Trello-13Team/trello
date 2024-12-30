@@ -147,7 +147,7 @@ public class CardService {
         Member member = memberRepository.findByUser_IdAndWorkspace_Id(userId, workspaceId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_MEMBER)
         );
-        if(member.getRole() == Member.MemberRole.MANAGER ){
+        if(member.getRole() == Member.MemberRole.READONLY ){
             throw new BaseException(ErrorCode.NOT_ALLOW_MANAGER);
         }
     }

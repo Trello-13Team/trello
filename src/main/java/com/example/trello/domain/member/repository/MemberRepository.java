@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -23,4 +24,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByUserId(Long userId);
 
+    Optional<Member> findByUser_IdAndWorkspace_Id(Long userId, Long workspaceId);
 }
+
