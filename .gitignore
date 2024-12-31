@@ -40,6 +40,6 @@ out/
 
 jacoco/
 
-AWS_TEST.http.http
+AWS_TEST.http
 LOCAL_TEST.http
 
