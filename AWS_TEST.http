@@ -95,7 +95,7 @@ Content-Type: application/json
 }
 
 
-### 리스트 삭제 (1번)
+### 리스트 삭제 (아이디 1번)
 DELETE http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/lists/1
 
 
@@ -132,7 +132,7 @@ Content-Type: application/json
   "pageSize": 5
 }
 
-### 댓글 작성
+### 댓글 작성 3번
 POST http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/workspaces/1/cards/2/comments
 Content-Type: application/json
 
@@ -140,22 +140,21 @@ Content-Type: application/json
   "content" : "comment"
 }
 
-### 카드 검색
+### 카드 전체 검색
 GET http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/workspaces/1/cards
 Content-Type: application/json
 
 {
-  "title": "Ca",
   "pageNumber": 1,
   "pageSize": 5
 }
 
-### 카드 상세 조회
+### 댓글을 작성한 2번 카드 상세 조회
 GET http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/workspaces/1/cards/2
 
 
 ### 보드 단건 조회
-GET http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/boards/2
+GET http://ec2-52-87-160-81.compute-1.amazonaws.com:8080/api/v1/boards/1
 
 ### 파일 업로드
 POST /api/v1/workspaces/1/cards/2 HTTP/1.1
